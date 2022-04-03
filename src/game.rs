@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 
 use self::{
+    ball::ball_bundle,
     movement::{movement_system, MoveControls},
     pad::pad_bundle,
     scoreboard::scoreboard,
@@ -26,6 +27,8 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     let font = asset_server.load("fonts/ComicNeue-Regular.ttf");
     commands.spawn_bundle(scoreboard(font));
 
+    commands.spawn_bundle(ball_bundle(0., 0.));
+
     commands
         .spawn_bundle(pad_bundle(500.0, 0.0))
         .insert(MoveControls {
@@ -44,6 +47,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
         });
 }
 
+mod ball;
 mod movement;
 mod pad;
 mod scoreboard;
