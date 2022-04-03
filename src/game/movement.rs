@@ -13,20 +13,19 @@ pub fn movement_system(
     mut query: Query<(&mut Transform, &MoveControls)>,
 ) {
     macro_rules! control {
-        ($input:ident, $controls:ident, $transform:ident, $speed:ident, $control:ident) => {
-            if $input.pressed($controls.$control) {
-                let $control = $transform.$control();
-                $transform.translation += $control * $speed;
-            }
+        ($input:ident, $controls:ident, $transform:ident, $speed:ident | $($control:ident)*) => {
+            $(
+                if $input.pressed($controls.$control) {
+                    let $control = $transform.$control();
+                    $transform.translation += $control * $speed;
+                }
+            )*
         };
     }
 
     let speed = 10.;
 
     for (mut transform, controls) in query.iter_mut() {
-        control!(input, controls, transform, speed, up);
-        control!(input, controls, transform, speed, down);
-        control!(input, controls, transform, speed, left);
-        control!(input, controls, transform, speed, right);
+        control!(input, controls, transform, speed | up down left right);
     }
 }
