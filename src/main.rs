@@ -9,3 +9,4 @@ fn main() {
 }
 
 mod game;
+pub(crate) mod util;
