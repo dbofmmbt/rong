@@ -17,8 +17,7 @@ fn hello() {
 fn setup(mut commands: Commands) {
     commands.spawn_bundle(OrthographicCameraBundle::new_2d());
 
-    commands.spawn_bundle(pad_bundle(-500.0, 0.0));
-    commands.spawn_bundle(pad_bundle(500.0, 0.0));
+    commands.spawn_batch([pad_bundle(-500.0, 0.0), pad_bundle(500.0, 0.0)]);
 }
 
 mod pad;
