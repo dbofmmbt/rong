@@ -1,11 +1,11 @@
 use bevy::prelude::*;
 
-#[derive(Debug, Component)]
+#[derive(Debug, Component, Default)]
 pub struct MoveControls {
-    pub up: KeyCode,
-    pub down: KeyCode,
-    pub left: KeyCode,
-    pub right: KeyCode,
+    pub up: Option<KeyCode>,
+    pub down: Option<KeyCode>,
+    pub left: Option<KeyCode>,
+    pub right: Option<KeyCode>,
 }
 
 pub fn movement_system(
@@ -18,9 +18,11 @@ pub fn movement_system(
         macro_rules! respond_to_input {
             ($($control:tt)*) => {
                 $(
-                    if input.pressed(controls.$control) {
-                        let $control = transform.$control();
-                        transform.translation += $control * speed;
+                    if let Some(control) = controls.$control {
+                        if input.pressed(control) {
+                            let $control = transform.$control();
+                            transform.translation += $control * speed;
+                        }
                     }
                 )*
             };

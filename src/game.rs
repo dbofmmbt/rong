@@ -1,5 +1,7 @@
 use bevy::prelude::*;
 
+use crate::util::default;
+
 use self::{
     ball::ball_bundle,
     movement::{movement_system, MoveControls},
@@ -31,23 +33,21 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
 
     commands
         .spawn_bundle(ball_bundle(0., 0.))
-        .insert(Velocity(Vec3::new(10., 10., 0.)));
+        .insert(Velocity(Vec3::new(0., 0., 0.)));
 
     commands
         .spawn_bundle(pad_bundle(500.0, 0.0))
         .insert(MoveControls {
-            up: KeyCode::Up,
-            down: KeyCode::Down,
-            left: KeyCode::Left,
-            right: KeyCode::Right,
+            up: Some(KeyCode::Up),
+            down: Some(KeyCode::Down),
+            ..default()
         });
     commands
         .spawn_bundle(pad_bundle(-500.0, 0.0))
         .insert(MoveControls {
-            up: KeyCode::W,
-            down: KeyCode::S,
-            left: KeyCode::A,
-            right: KeyCode::D,
+            up: Some(KeyCode::W),
+            down: Some(KeyCode::S),
+            ..default()
         });
 }
 
