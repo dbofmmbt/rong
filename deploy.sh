@@ -8,6 +8,7 @@ HASH=$(git log --pretty=format:'%h' -n 1)
 
 git switch github-pages
 
+rm index*
 mv dist/* .
 rm -r dist
 
