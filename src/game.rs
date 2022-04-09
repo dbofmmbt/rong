@@ -40,8 +40,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
             down: KeyCode::Down,
             left: KeyCode::Left,
             right: KeyCode::Right,
-        })
-        .insert(Velocity(Vec3::new(2., 2., 0.)));
+        });
     commands
         .spawn_bundle(pad_bundle(-500.0, 0.0))
         .insert(MoveControls {
