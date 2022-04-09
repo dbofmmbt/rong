@@ -11,6 +11,7 @@ git switch github-pages
 rm index*
 mv dist/* .
 rm -r dist
+git checkout main -- assets
 
 git add -A
 git commit -m "deploy version $HASH"
