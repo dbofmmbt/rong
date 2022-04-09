@@ -1,2 +1,3 @@
 [build]
 public_url = "/rong/"
+release = true
