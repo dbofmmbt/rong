@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use heron::{CollisionShape, PhysicMaterial, RigidBody};
 
 use crate::{SCREEN_HEIGHT, SCREEN_WIDTH};
 
@@ -9,23 +10,39 @@ pub struct Wall;
 
 pub const WALL_SIZE: f32 = 100.;
 
+use WallKind::*;
+
 pub fn create_window_boundaries(commands: &mut Commands) {
-    commands.spawn().insert(Wall).insert_bundle(wall_transform(
-        WallKind::Vertical,
-        Vec2::new((SCREEN_WIDTH + WALL_SIZE) / -2., 0.),
-    ));
-    commands.spawn().insert(Wall).insert_bundle(wall_transform(
-        WallKind::Vertical,
-        Vec2::new((SCREEN_WIDTH + WALL_SIZE) / 2., 0.),
-    ));
-    commands.spawn().insert(Wall).insert_bundle(wall_transform(
-        WallKind::Horizontal,
-        Vec2::new(0., (SCREEN_HEIGHT + WALL_SIZE) / 2.),
-    ));
-    commands.spawn().insert(Wall).insert_bundle(wall_transform(
-        WallKind::Horizontal,
-        Vec2::new(0., (SCREEN_HEIGHT + WALL_SIZE) / -2.),
-    ));
+    let horizontal_position = (SCREEN_WIDTH + WALL_SIZE) / 2.;
+    let vertical_position = (SCREEN_HEIGHT + WALL_SIZE) / 2.;
+
+    create_wall(commands, Vertical, Vec2::new(horizontal_position, 0.));
+    create_wall(commands, Vertical, Vec2::new(-horizontal_position, 0.));
+
+    create_wall(commands, Horizontal, Vec2::new(0., vertical_position));
+    create_wall(commands, Horizontal, Vec2::new(0., -vertical_position));
+}
+
+fn create_wall(commands: &mut Commands, kind: WallKind, translation: Vec2) {
+    let bundle = wall_sprite_bundle(kind, translation);
+    commands
+        .spawn()
+        .insert(Wall)
+        .insert(shape(bundle.transform.scale))
+        .insert_bundle(bundle)
+        .insert(RigidBody::Static)
+        .insert(PhysicMaterial {
+            restitution: 1.,
+            density: 1.,
+            friction: 0.,
+        });
+}
+
+fn shape(scale: Vec3) -> CollisionShape {
+    CollisionShape::Cuboid {
+        half_extends: scale / 2.,
+        border_radius: None,
+    }
 }
 
 enum WallKind {
@@ -33,10 +50,10 @@ enum WallKind {
     Horizontal,
 }
 
-fn wall_transform(kind: WallKind, translation: Vec2) -> SpriteBundle {
+fn wall_sprite_bundle(kind: WallKind, translation: Vec2) -> SpriteBundle {
     let (width, height) = match kind {
         WallKind::Vertical => (WALL_SIZE, SCREEN_HEIGHT),
-        WallKind::Horizontal => (SCREEN_WIDTH - WALL_SIZE, WALL_SIZE),
+        WallKind::Horizontal => (SCREEN_WIDTH, WALL_SIZE),
     };
     SpriteBundle {
         sprite: Sprite {
