@@ -1,5 +1,7 @@
 use bevy::prelude::*;
 
+use crate::util::default;
+
 pub fn pad_bundle(x: f32, y: f32) -> SpriteBundle {
     let size = Vec2::new(20.0, 250.0);
     SpriteBundle {

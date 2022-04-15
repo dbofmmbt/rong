@@ -1,5 +1,7 @@
 use bevy::prelude::*;
 
+use crate::util::default;
+
 pub fn scoreboard(font: Handle<Font>) -> impl Bundle {
     let style = TextStyle {
         font,

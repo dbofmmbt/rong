@@ -1,14 +1,15 @@
 use bevy::prelude::*;
+use heron::prelude::*;
 
 use self::{
     ball::ball_bundle,
-    collision::{collision_detection, collision_log, CollisionEvent},
     movement::{movement_system, MoveControls},
     pad::pad_bundle,
     scoreboard::scoreboard,
     velocity::{velocity_system, Velocity},
-    wall::{create_window_boundaries, wall_collision_handling},
+    wall::create_window_boundaries,
 };
+use crate::util::default;
 
 pub struct GamePlugin;
 
@@ -16,12 +17,9 @@ impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
         app.add_startup_system(hello)
             .add_startup_system(setup)
-            .add_event::<CollisionEvent>()
-            .add_system(collision_detection)
-            .add_system(collision_log)
+            .add_plugin(PhysicsPlugin::default())
             .add_system(movement_system)
-            .add_system(velocity_system)
-            .add_system(wall_collision_handling);
+            .add_system(velocity_system);
     }
 }
 
@@ -58,7 +56,6 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
 }
 
 mod ball;
-mod collision;
 mod movement;
 mod pad;
 mod scoreboard;

@@ -3,6 +3,7 @@ use bevy::{
     prelude::*,
 };
 use game::GamePlugin;
+use util::default;
 
 pub const SCREEN_WIDTH: f32 = 1280.;
 pub const SCREEN_HEIGHT: f32 = 720.;
@@ -23,6 +24,7 @@ fn main() {
 }
 
 mod game;
+mod util;
 
 fn inspect(
     keyboard: Res<Input<KeyCode>>,

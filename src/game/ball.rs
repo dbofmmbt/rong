@@ -1,5 +1,7 @@
 use bevy::prelude::*;
 
+use crate::util::default;
+
 pub fn ball_bundle(x: f32, y: f32) -> impl Bundle {
     const SIDE_SIZE: f32 = 50.;
     let size = Vec2::new(SIDE_SIZE, SIDE_SIZE);

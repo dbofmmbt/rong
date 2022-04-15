@@ -1,8 +1,8 @@
-use bevy::{prelude::*, sprite::collide_aabb::Collision};
+use bevy::prelude::*;
 
 use crate::{SCREEN_HEIGHT, SCREEN_WIDTH};
 
-use super::collision::CollisionEvent;
+use crate::util::default;
 
 #[derive(Debug, Component)]
 pub struct Wall;
@@ -33,7 +33,7 @@ enum WallKind {
     Horizontal,
 }
 
-fn wall_transform(kind: WallKind, mut translation: Vec2) -> SpriteBundle {
+fn wall_transform(kind: WallKind, translation: Vec2) -> SpriteBundle {
     let (width, height) = match kind {
         WallKind::Vertical => (WALL_SIZE, SCREEN_HEIGHT),
         WallKind::Horizontal => (SCREEN_WIDTH - WALL_SIZE, WALL_SIZE),
@@ -49,26 +49,5 @@ fn wall_transform(kind: WallKind, mut translation: Vec2) -> SpriteBundle {
             ..default()
         },
         ..default()
-    }
-}
-
-pub fn wall_collision_handling(
-    mut transform_query: Query<&mut Transform>,
-    query: Query<&Wall>,
-    mut reader: EventReader<CollisionEvent>,
-) {
-    for event in reader.iter().filter(|event| query.get(event.other).is_ok()) {
-        let mut transform = transform_query.get_mut(event.me).unwrap();
-        match event.collision {
-            Collision::Left => todo!(),
-            Collision::Right => todo!(),
-            Collision::Top => {
-                transform.translation.y = (SCREEN_HEIGHT - transform.scale.y) / -2.;
-            }
-            Collision::Bottom => {
-                transform.translation.y = (SCREEN_HEIGHT - transform.scale.y) / 2.;
-            }
-            _ => (),
-        }
     }
 }
