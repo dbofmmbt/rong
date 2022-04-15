@@ -1,13 +1,13 @@
 use bevy::prelude::*;
 
-use crate::util::default;
-
 use self::{
     ball::ball_bundle,
+    collision::{collision_detection, collision_log, CollisionEvent},
     movement::{movement_system, MoveControls},
     pad::pad_bundle,
     scoreboard::scoreboard,
     velocity::{velocity_system, Velocity},
+    wall::create_window_boundaries,
 };
 
 pub struct GamePlugin;
@@ -16,6 +16,9 @@ impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
         app.add_startup_system(hello)
             .add_startup_system(setup)
+            .add_event::<CollisionEvent>()
+            .add_system(collision_detection)
+            .add_system(collision_log)
             .add_system(movement_system)
             .add_system(velocity_system);
     }
@@ -30,6 +33,8 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
 
     let font = asset_server.load("fonts/ComicNeue-Regular.ttf");
     commands.spawn_bundle(scoreboard(font));
+
+    create_window_boundaries(&mut commands);
 
     commands
         .spawn_bundle(ball_bundle(0., 0.))
@@ -52,7 +57,9 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
 }
 
 mod ball;
+mod collision;
 mod movement;
 mod pad;
 mod scoreboard;
 mod velocity;
+mod wall;
