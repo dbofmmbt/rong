@@ -7,7 +7,7 @@ use self::{
     pad::pad_bundle,
     scoreboard::scoreboard,
     velocity::{velocity_system, Velocity},
-    wall::create_window_boundaries,
+    wall::{create_window_boundaries, wall_collision_handling},
 };
 
 pub struct GamePlugin;
@@ -20,7 +20,8 @@ impl Plugin for GamePlugin {
             .add_system(collision_detection)
             .add_system(collision_log)
             .add_system(movement_system)
-            .add_system(velocity_system);
+            .add_system(velocity_system)
+            .add_system(wall_collision_handling);
     }
 }
 
